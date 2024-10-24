@@ -1,0 +1,20 @@
+[package]
+name    = "exifparse"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+napi-ohos        = { version = "1.0.0" }
+napi-derive-ohos = { version = "1.0.0" }
+nom-exif = "=2.2.1"
+
+[build-dependencies]
+napi-build-ohos = { version = "1.0.0" }
+
+[profile.release]
+lto = true
