@@ -1,5 +1,6 @@
+
 use napi_derive_ohos::napi;
-use napi_ohos::{Error, JsError, Status};
+use napi_ohos::{JsError, Status,Error};
 use nom_exif::*;
 use serde_json::json;
 use std::collections::HashMap;
@@ -8,22 +9,7 @@ use std::io::Write;
 use std::result::Result;
 use uuid::Uuid;
 
-#[napi]
-fn add(a: i32, b: i32) -> i32 {
-    a + b
-}
-
-#[napi]
-fn getfilepath() -> String {
-    let temp_dir = std::env::temp_dir();
-    let mut temp_path = temp_dir.join(format!("temp_{}", Uuid::new_v4()));
-    temp_path.set_extension("jpg");
-    temp_path.to_string_lossy().into_owned()
-}
-
-
-#[napi]
-fn bytes_to_temp_file(bytes: &[u8], extension: String) -> Result<String, Error> {
+fn bytes_to_temp_file(bytes: &[u8], extension: &str) -> Result<String, Error> {
     // 创建临时文件
     let temp_dir = std::env::temp_dir();
     let mut temp_path = temp_dir.join(format!("temp_{}", Uuid::new_v4()));
@@ -36,11 +22,11 @@ fn bytes_to_temp_file(bytes: &[u8], extension: String) -> Result<String, Error> 
 
 #[napi]
 fn exif_parse(bytes: &[u8], extension: String) -> Result<String, JsError> {
-    let file_str: String = bytes_to_temp_file(&bytes, extension)
-        .map_err(|e| JsError::from(Error::new(Status::GenericFailure, format!("{:?}", e))))?;
+    let file_str: String = bytes_to_temp_file(&bytes, &extension)
+    .map_err(|e| JsError::from(Error::new(Status::GenericFailure, format!("{:?}", e))))?;
     let mut parser = MediaParser::new();
     let ms = MediaSource::file_path(file_str.clone())
-        .map_err(|e| JsError::from(Error::new(Status::GenericFailure, format!("{:?}", e))))?;
+    .map_err(|e| JsError::from(Error::new(Status::GenericFailure, format!("{:?}", e))))?;
     // 用来存储 JSON 数据
     let mut result = json!({ "type": "unknown", "filePath": file_str });
     if ms.has_exif() {
