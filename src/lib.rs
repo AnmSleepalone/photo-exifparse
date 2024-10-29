@@ -8,11 +8,14 @@ use std::io::Write;
 use std::result::Result;
 use uuid::Uuid;
 
+
+// 测试用例
 #[napi]
 fn add(a: i32, b: i32) -> i32 {
     a + b
 }
 
+// 获取缓存缓存路径
 #[napi]
 fn getfilepath() -> String {
     let temp_dir = std::env::temp_dir();
@@ -21,6 +24,7 @@ fn getfilepath() -> String {
     temp_path.to_string_lossy().into_owned()
 }
 
+// 字节数组转临时文件
 #[napi]
 fn bytes_to_temp_file(bytes: &[u8], extension: String) -> Result<String, Error> {
     // 创建临时文件
@@ -33,6 +37,7 @@ fn bytes_to_temp_file(bytes: &[u8], extension: String) -> Result<String, Error> 
     Ok(temp_path.to_string_lossy().into_owned())
 }
 
+// 解析 exif 数据
 #[napi]
 fn exif_parse(bytes: &[u8], extension: String) -> Result<String, JsError> {
     let file_str: String = bytes_to_temp_file(&bytes, extension)
