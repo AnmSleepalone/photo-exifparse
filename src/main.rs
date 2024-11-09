@@ -56,7 +56,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-// fn main() {
-//     // let bytes = include_bytes!("../../test.jpg");
-//     // exif_parse(bytes).unwrap();
-// }
+fn main() {
+    let bytes = include_bytes!("../../test.jpg");
+    exif_parse(bytes).unwrap();
+}
